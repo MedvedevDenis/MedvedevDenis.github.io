@@ -52,6 +52,10 @@ for(i=0;i<vertices.length;i++)
 context.moveTo(mouse.x, mouse.y);
 if(V==1)draw = true;
 });
+move =function()
+{
+   
+}
 canvas.addEventListener("mousemove", function(e){
  
     if(draw==true && V==1){
@@ -62,6 +66,15 @@ canvas.addEventListener("mousemove", function(e){
         context.stroke();
     }
 });
+canvas.addEventListener("touchmove", function(e){
+    if(draw==true && V==1){
+        
+        mouse.x = e.pageX - this.offsetLeft;
+        mouse.y = e.pageY - this.offsetTop;
+        context.lineTo(mouse.x, mouse.y);
+        context.stroke();
+    }
+ });
 clear=function()
 {
     context.fillStyle = "#ffffff";
