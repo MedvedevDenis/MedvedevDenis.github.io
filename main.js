@@ -9,7 +9,7 @@ class Vertex {
       this.r=r;
       this.edges=[];
       this.active=0
-      this.dfsi=0
+      this.dfsi=-1
     }
   
    
@@ -76,6 +76,7 @@ render = function()
         context.font = "30px Arial";
         context.fillStyle = 'black'; 
         context.fillText(vertices[i].id.toString(),vertices[i].x,vertices[i].y); 
+        if(vertices[i].dfsi>=0)
         context.fillText(vertices[i].dfsi.toString(),vertices[i].x-vertices[i].r,vertices[i].y-vertices[i].r*1.5); 
         
                                 }
@@ -105,7 +106,7 @@ for(i=0;i<vertices.length;i++)
         vertices.push(new Vertex(vertices.length,mouse.x,mouse.y,50));
         for(i=0;i<vertices.length;i++)
         {
-            vertices[i].dfsi=0;
+            vertices[i].dfsi=-1;
         }
        
     }
@@ -188,31 +189,46 @@ function GetMatrix(rows,columns){
     return arr;
   }
 used=[];
+vu=[];
 K=0;
+Prev=0
 function dfs(M,v)
 {
    
-
-  used[v] = 1;
-
-   
+  
+  used[v] = 1;  
   vertices[v].dfsi=K;
-  K=K+1;
-   
+  
 
-  for (i = 0; i < vertices.length; i++)
+  Prev=v;
+  for (var i = 0; i < vertices.length; i++)
+    {   
+       
+        
+    if (M[v][i]==1 && used[i] !=1) 
+    {   
+        K=K+1;    
+        dfs(M,i);     
+    }
 
-    if (M[v][i] && !used[i]) dfs(M,i);
+}
 
+  
 } 
 btn_dfs.addEventListener("click", function(e){
     Active=0;
     K=0;
     used=[];
     for(i=0;i<vertices.length;i++)
+    {
         if(vertices[i].active==1)
             Active=i;
+    used.push(0);
+    }
     var M=GetMatrix(vertices.length,vertices.length);
-    dfs(M,Active);
+     
+       
+        dfs(M,Active);
+       
     render();
 }); 
