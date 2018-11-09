@@ -56,6 +56,11 @@ class Vertex
         context.fillRect(0, 0, canvas.width, canvas.height);
     
     }
+    canvas.addEventListener('touchstart', function(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        alert("WORK");
+        }, false);
     render = function()
     {
       
