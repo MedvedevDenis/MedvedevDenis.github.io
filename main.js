@@ -23,7 +23,7 @@ class Vertex
   
     
     
-  var Area = document.getElementById('Area');
+  
   
   var newWidth = window.innerWidth;
   var newHeight = window.innerHeight;
@@ -33,13 +33,13 @@ class Vertex
     var canvas  = document.getElementById('canvas'),
     context = canvas.getContext('2d');
     
-    canvas.width = newWidth;
-    canvas.height = newHeight-100; 
+    canvas.width = 2*newWidth;
+    canvas.height = 2*(newHeight-100); 
      
     var vertices=[]
 
         
-    var R=(newWidth+newHeight)/70;
+    var R=(newWidth+newHeight)/40;
     var btn_clear = document.getElementById("btn_clear");
     var btn_dv = document.getElementById("btn_dv");
     var btn_dfs = document.getElementById("btn_dfs");
@@ -53,7 +53,7 @@ class Vertex
        
     clear=function()
     {
-        context.fillStyle = "#ffffff";
+        context.fillStyle = "#34495e";
         context.fillRect(0, 0, canvas.width, canvas.height);
     
     } 
@@ -72,7 +72,7 @@ class Vertex
                         context.beginPath();  
                         context.moveTo(vertices[i].x,vertices[i].y);   
                         context.lineTo(vertices[k].x, vertices[k].y);
-                        context.strokeStyle = '#003300';
+                        context.strokeStyle = '#000000';
                         context.stroke();                          
                         context.closePath();
                                                              }
@@ -86,14 +86,14 @@ class Vertex
             context.beginPath();
             context.arc(vertices[i].x, vertices[i].y, vertices[i].r, 0, 2 * Math.PI, false);
             if(vertices[i].active==0)
-            context.fillStyle = 'AliceBlue';
+            context.fillStyle = '#ecf0f1';
             if(vertices[i].active==1)
             context.fillStyle = '#2ecc71';
             if(vertices[i].IsCutVertex==true)
             context.fillStyle = '#e74c3c';
             context.fill();
             context.lineWidth = 5;
-            context.strokeStyle = '#003300';
+            context.strokeStyle = '#000000';
             context.stroke();
             
             context.closePath();
@@ -107,7 +107,7 @@ class Vertex
             context.beginPath();
             context.arc(vertices[i].x-vertices[i].r*1.9,vertices[i].y-vertices[i].r*1.6, 20, 0, 2 * Math.PI, false);
             context.lineWidth = 3;
-            context.strokeStyle = '#e74c3c';
+            context.strokeStyle = '#c0392b';
             context.stroke();
             
             context.fillText(vertices[i].return_index.toString(),vertices[i].x-vertices[i].r*2,vertices[i].y-vertices[i].r*1.5);
@@ -121,8 +121,8 @@ class Vertex
     canvas.addEventListener("mousedown", function(e)
     {
     V=0;
-    mouse.x = e.pageX - this.offsetLeft;
-    mouse.y = e.pageY - this.offsetTop;
+    mouse.x =2*( e.pageX - this.offsetLeft);
+    mouse.y = 2*(e.pageY - this.offsetTop);
     var A=0;
     for(var i=0;i<vertices.length;i++) 
     { 
@@ -153,19 +153,19 @@ class Vertex
      
         if(draw==true && V==1){
             
-            mouse.x = e.pageX - this.offsetLeft;
-            mouse.y = e.pageY - this.offsetTop;
+            mouse.x =2*( e.pageX - this.offsetLeft);
+            mouse.y = 2*(e.pageY - this.offsetTop);
             
             context.lineTo(mouse.x, mouse.y);
-            context.strokeStyle = '#003300';
+            context.strokeStyle = '#000000';
             context.stroke();
         }
     });
     
     canvas.addEventListener("mouseup", function(e){
      
-    mouse.x = e.pageX - this.offsetLeft;
-    mouse.y = e.pageY - this.offsetTop;
+        mouse.x = 2*( e.pageX - this.offsetLeft);
+        mouse.y = 2*(e.pageY - this.offsetTop);
     context.closePath();
     
     
