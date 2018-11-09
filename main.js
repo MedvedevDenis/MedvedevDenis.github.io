@@ -23,29 +23,23 @@ class Vertex
   
     
     
-    var Area = document.getElementById('Area');
-    var widthToHeight = 16 / 9;
-    var newWidth = window.innerWidth;
-    var newHeight = window.innerHeight;
-    var newWidthToHeight = newWidth / newHeight;
-     
-    
-        newHeight = newWidth / widthToHeight;
-        Area.style.width = newWidth + 'px';
-        Area.style.height = newHeight + 'px';
-     
-    
+  var Area = document.getElementById('Area');
+  
+  var newWidth = window.innerWidth;
+  var newHeight = window.innerHeight;
+   
+ 
     
     var canvas  = document.getElementById('canvas'),
-      context = canvas.getContext('2d');
+    context = canvas.getContext('2d');
     
     canvas.width = newWidth;
-    canvas.height = newHeight; 
+    canvas.height = newHeight-100; 
      
     var vertices=[]
 
         
-    var R=(newWidth+newHeight)/50;
+    var R=(newWidth+newHeight)/70;
     var btn_clear = document.getElementById("btn_clear");
     var btn_dv = document.getElementById("btn_dv");
     var btn_dfs = document.getElementById("btn_dfs");
