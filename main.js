@@ -49,18 +49,38 @@ class Vertex
     var draw = false;
     var V=0;
     
-    
+  
+       
     clear=function()
     {
         context.fillStyle = "#ffffff";
         context.fillRect(0, 0, canvas.width, canvas.height);
     
     }
-    canvas.addEventListener('touchstart', function(event) {
-        event.preventDefault();
-        event.stopPropagation();
-        alert("WORK");
-        }, false);
+    canvas.addEventListener("touchstart", handleStart, false);
+    canvas.addEventListener("touchend", handleEnd, false);
+  
+  canvas.addEventListener("touchmove", function(e){
+    e.preventDefault();
+     
+    var touches = e.changedTouches;
+  
+    for (var i = 0; i < touches.length; i++) {
+      var color = colorForTouch(touches[i]);
+      var idx = ongoingTouchIndexById(touches[i].identifier);
+  
+      if (idx >= 0) {
+         
+        context.beginPath();
+         
+        context.moveTo(ongoingTouches[idx].pageX, ongoingTouches[idx].pageY);
+ 
+        context.lineTo(touches[i].pageX, touches[i].pageY);
+        context.lineWidth = 4;
+        context.strokeStyle = color;
+        context.stroke();
+  
+  }}}, false); 
     render = function()
     {
       
