@@ -59,7 +59,7 @@ class Vertex
     }
      
   canvas.addEventListener("touchmove", function(e){
-    e.preventDefault();
+    
      
     var touches = e.changedTouches;
   
@@ -67,7 +67,7 @@ class Vertex
       var color = colorForTouch(touches[i]);
       var idx = ongoingTouchIndexById(touches[i].identifier);
   
-      if (idx >= 0) {
+       
          
         context.beginPath();
          
@@ -78,7 +78,7 @@ class Vertex
         context.strokeStyle = color;
         context.stroke();
   
-  }}}, false); 
+   }}, false); 
     render = function()
     {
       
