@@ -57,9 +57,7 @@ class Vertex
         context.fillRect(0, 0, canvas.width, canvas.height);
     
     }
-    canvas.addEventListener("touchstart", handleStart, false);
-    canvas.addEventListener("touchend", handleEnd, false);
-  
+     
   canvas.addEventListener("touchmove", function(e){
     e.preventDefault();
      
