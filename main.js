@@ -60,7 +60,7 @@ class Vertex
      
   canvas.addEventListener("touchmove", function(e){
     
-     
+     alert("VR");
     var touches = e.changedTouches;
   
     for (var i = 0; i < touches.length; i++) {
