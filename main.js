@@ -1,28 +1,56 @@
  
-class Vertex {
+class Vertex 
+{
     
     constructor(id,x,y,r) 
     {
       this.id = id;
-      this.x=x;
-      this.y=y;
-      this.r=r;
       this.edges=[];
       this.active=0
       this.dfsi=-1
+      this.return_index=-1;
+      this.IsCutVertex=false;
+      this.x=x;
+      this.y=y;
+      this.r=r;
     }
   
    
   
   }
-  
-   
+
+  var canvas;
+  var Area = document.getElementById('Area');
+    var widthToHeight = 4 / 3;
+    var newWidth = window.innerWidth;
+    var newHeight = window.innerHeight;
+    var newWidthToHeight = newWidth / newHeight;
+    
+    if (newWidthToHeight > widthToHeight) {
+        newWidth = newHeight * widthToHeight;
+        Area.style.height = newHeight + 'px';
+        Area.style.width = newWidth + 'px';
+    } else {
+        newHeight = newWidth / widthToHeight;
+        Area.style.width = newWidth + 'px';
+        Area.style.height = newHeight + 'px';
+    }
+    
+    Area.style.marginTop = (-newHeight / 2) + 'px';
+    Area.style.marginLeft = (-newWidth / 2) + 'px';
+    
+    canvas = document.getElementById('canvas');
+    
+    canvas.width = newWidth;
+    canvas.height = newHeight;  
 var vertices=[]
-var canvas = document.getElementById("canvas"), 
-context = canvas.getContext("2d"),
-w = canvas.width,
-h=canvas.height;
+
+var context = canvas.getContext("2d"),
+
+
+
 var btn_clear = document.getElementById("btn_clear");
+var btn_dv = document.getElementById("btn_dv");
 var I=0;
 var J=0;
 var mouse = { x:0, y:0};
@@ -51,6 +79,7 @@ render = function()
                     context.beginPath();  
                     context.moveTo(vertices[i].x,vertices[i].y);   
                     context.lineTo(vertices[k].x, vertices[k].y);
+                    context.strokeStyle = '#003300';
                     context.stroke();                          
                     context.closePath();
                                                          }
@@ -64,20 +93,32 @@ render = function()
         context.beginPath();
         context.arc(vertices[i].x, vertices[i].y, vertices[i].r, 0, 2 * Math.PI, false);
         if(vertices[i].active==0)
-        context.fillStyle = 'green';
+        context.fillStyle = 'AliceBlue';
         if(vertices[i].active==1)
-        context.fillStyle = 'red';
+        context.fillStyle = '#2ecc71';
+        if(vertices[i].IsCutVertex==true)
+        context.fillStyle = '#e74c3c';
         context.fill();
         context.lineWidth = 5;
         context.strokeStyle = '#003300';
         context.stroke();
         
         context.closePath();
-        context.font = "30px Arial";
+        context.font = "20px Arial";
         context.fillStyle = 'black'; 
         context.fillText(vertices[i].id.toString(),vertices[i].x,vertices[i].y); 
         if(vertices[i].dfsi>=0)
         context.fillText(vertices[i].dfsi.toString(),vertices[i].x-vertices[i].r,vertices[i].y-vertices[i].r*1.5); 
+        if(vertices[i].return_index>=0)
+        {
+        context.beginPath();
+        context.arc(vertices[i].x-vertices[i].r*1.9,vertices[i].y-vertices[i].r*1.6, 20, 0, 2 * Math.PI, false);
+        context.lineWidth = 3;
+        context.strokeStyle = '#e74c3c';
+        context.stroke();
+        
+        context.fillText(vertices[i].return_index.toString(),vertices[i].x-vertices[i].r*2,vertices[i].y-vertices[i].r*1.5);
+        }
         
                                 }
                                 
@@ -86,11 +127,11 @@ render = function()
                     }
 canvas.addEventListener("mousedown", function(e)
 {
-    V=0;
+V=0;
 mouse.x = e.pageX - this.offsetLeft;
 mouse.y = e.pageY - this.offsetTop;
-A=0;
-for(i=0;i<vertices.length;i++) 
+var A=0;
+for(var i=0;i<vertices.length;i++) 
 { 
     if(Math.sqrt((vertices[i].x-mouse.x)*(vertices[i].x-mouse.x)+(vertices[i].y-mouse.y)*(vertices[i].y-mouse.y))<=vertices[i].r){
         I=i;
@@ -104,7 +145,7 @@ for(i=0;i<vertices.length;i++)
     if(V==0 && A==0){
         
         vertices.push(new Vertex(vertices.length,mouse.x,mouse.y,50));
-        for(i=0;i<vertices.length;i++)
+        for(var i=0;i<vertices.length;i++)
         {
             vertices[i].dfsi=-1;
         }
@@ -121,7 +162,9 @@ canvas.addEventListener("mousemove", function(e){
         
         mouse.x = e.pageX - this.offsetLeft;
         mouse.y = e.pageY - this.offsetTop;
+        
         context.lineTo(mouse.x, mouse.y);
+        context.strokeStyle = '#003300';
         context.stroke();
     }
 });
@@ -159,6 +202,11 @@ for(i=0;i<vertices.length;i++)
   
   
 }
+if(flag==0)
+{
+    vertices[I].x=mouse.x;
+    vertices[I].y=mouse.y;
+}
 if(flag==1 && V==1)
 {
     vertices[I].edges.push(vertices[J].id);
@@ -171,7 +219,46 @@ render();
 });
 
 btn_clear.addEventListener("click", function(e){clear();vertices=[];});
-
+btn_dv.addEventListener("click", function(e)
+{
+    var Active=0;
+    var flag=0;
+    var JJ;
+    for(var i=0;i<vertices.length;i++)
+    {
+        if(vertices[i].active==1)
+           {
+                Active=i;
+                break;
+           }
+    }
+    for(var i=0;i<vertices.length;i++)
+    {
+        for(var j=0;j<vertices[i].edges.length;j++)
+        {
+            if(vertices[Active].id==vertices[i].edges[j])
+            {   JJ=vertices[i].edges[j];
+                vertices[i].edges.splice(j,1);
+                flag=1;
+               
+            }
+        }
+    }
+    for(var i=0;i<vertices.length;i++)
+    {
+         
+            for(var k=0;k<vertices[i].edges.length;k++)
+                {   
+                    if(JJ<vertices[i].edges[k])
+                        vertices[i].edges[k]=vertices[i].edges[k]-1;
+                }
+         
+    }
+    vertices.splice(Active,1)
+    for(var i=0;i<vertices.length;i++)
+    vertices[i].id=i;
+    render();
+});
 function GetMatrix(rows,columns){
     var arr = new Array();
     for(var i=0; i<rows; i++){
@@ -188,36 +275,54 @@ function GetMatrix(rows,columns){
     }
     return arr;
   }
-used=[];
-vu=[];
-K=0;
-Prev=0
+var used=[];
+
+var K=0;
+var prev=0;
 function dfs(M,v)
 {
-   
-  
+    
+  var flag=0;
   used[v] = 1;  
   vertices[v].dfsi=K;
+  var pv=prev;
   
-
-  Prev=v;
+  
   for (var i = 0; i < vertices.length; i++)
     {   
        
         
     if (M[v][i]==1 && used[i] !=1) 
     {   
-        K=K+1;    
+        K=K+1;
+        flag=1; 
+        prev=v;
+
         dfs(M,i);     
     }
 
-}
+    }
 
-  
+    var min=[];
+        for(var j=0;j<vertices[v].edges.length;j++)
+        {
+            for(var k=0;k<vertices.length;k++)
+            {   
+                    if(vertices[v].edges[j]==vertices[k].id && vertices[v].edges[j]!=vertices[pv].id )
+                    {
+                        min.push(vertices[k].dfsi)
+                    }
+            }
+        }
+        if(min.length>0)
+            vertices[v].return_index=Math.min.apply(null, min);
+        else 
+            vertices[v].return_index=vertices[v].dfsi;
+    
 } 
 btn_dfs.addEventListener("click", function(e){
-    Active=0;
-    K=0;
+    var Active=0;
+    K=0; 
     used=[];
     for(i=0;i<vertices.length;i++)
     {
@@ -225,10 +330,11 @@ btn_dfs.addEventListener("click", function(e){
             Active=i;
     used.push(0);
     }
+     
     var M=GetMatrix(vertices.length,vertices.length);
      
        
-        dfs(M,Active);
+    dfs(M,Active);
        
     render();
 }); 
