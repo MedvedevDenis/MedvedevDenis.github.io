@@ -56,29 +56,7 @@ class Vertex
         context.fillStyle = "#ffffff";
         context.fillRect(0, 0, canvas.width, canvas.height);
     
-    }
-     
-  canvas.addEventListener("touchmove", function(e){
-    
-     alert("VR");
-    var touches = e.changedTouches;
-  
-    for (var i = 0; i < touches.length; i++) {
-      var color = colorForTouch(touches[i]);
-      var idx = ongoingTouchIndexById(touches[i].identifier);
-  
-       
-         
-        context.beginPath();
-         
-        context.moveTo(ongoingTouches[idx].pageX, ongoingTouches[idx].pageY);
- 
-        context.lineTo(touches[i].pageX, touches[i].pageY);
-        context.lineWidth = 4;
-        context.strokeStyle = color;
-        context.stroke();
-  
-   }}, false); 
+    } 
     render = function()
     {
       
