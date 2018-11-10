@@ -4,8 +4,11 @@
     height: 100%;
   }
   .btn-primary{
-
-    background-color:#353b48;
-    
+ 
      
+    }
+   .body
+    {
+      font-family: 'Open Sans Condensed', sans-serif;
+      background:#70a1ff;
     }

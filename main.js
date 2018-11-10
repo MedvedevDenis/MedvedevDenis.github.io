@@ -53,7 +53,7 @@ class Vertex
        
     clear=function()
     {
-        context.fillStyle = "#34495e";
+        context.fillStyle = "#ffffff";
         context.fillRect(0, 0, canvas.width, canvas.height);
     
     } 
@@ -72,7 +72,7 @@ class Vertex
                         context.beginPath();  
                         context.moveTo(vertices[i].x,vertices[i].y);   
                         context.lineTo(vertices[k].x, vertices[k].y);
-                        context.strokeStyle = '#000000';
+                        context.strokeStyle = '#2c3e50';
                         context.stroke();                          
                         context.closePath();
                                                              }
@@ -86,14 +86,14 @@ class Vertex
             context.beginPath();
             context.arc(vertices[i].x, vertices[i].y, vertices[i].r, 0, 2 * Math.PI, false);
             if(vertices[i].active==0)
-            context.fillStyle = '#ecf0f1';
+            context.fillStyle = '#f1f2f6';
             if(vertices[i].active==1)
-            context.fillStyle = '#2ecc71';
+            context.fillStyle = '#2ed573';
             if(vertices[i].IsCutVertex==true)
-            context.fillStyle = '#e74c3c';
+            context.fillStyle = '#ff4757';
             context.fill();
             context.lineWidth = 5;
-            context.strokeStyle = '#000000';
+            context.strokeStyle = '#2c3e50';
             context.stroke();
             
             context.closePath();
@@ -107,7 +107,7 @@ class Vertex
             context.beginPath();
             context.arc(vertices[i].x-vertices[i].r*1.9,vertices[i].y-vertices[i].r*1.6, 20, 0, 2 * Math.PI, false);
             context.lineWidth = 3;
-            context.strokeStyle = '#c0392b';
+            context.strokeStyle = '#ff4757';
             context.stroke();
             
             context.fillText(vertices[i].return_index.toString(),vertices[i].x-vertices[i].r*2,vertices[i].y-vertices[i].r*1.5);
@@ -157,7 +157,7 @@ class Vertex
             mouse.y = 2*(e.pageY - this.offsetTop);
             
             context.lineTo(mouse.x, mouse.y);
-            context.strokeStyle = '#000000';
+            context.strokeStyle = '#2c3e50';
             context.stroke();
         }
     });
@@ -275,7 +275,7 @@ class Vertex
     function dfs(M,v)
     {
         
-      var flag=0;
+      
       used[v] = 1;  
       vertices[v].dfsi=K;
       var pv=prev;
@@ -321,7 +321,7 @@ class Vertex
         {
             if(vertices[i].active==1)
                 Active=i;
-        used.push(0);
+            used.push(0);
         }
          
         var M=GetMatrix(vertices.length,vertices.length);
