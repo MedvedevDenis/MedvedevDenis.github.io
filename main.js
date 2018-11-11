@@ -37,7 +37,7 @@ class Vertex
     canvas.height = 2*(newHeight-100); 
      
     var vertices=[]
-
+    var blc=document.getElementById('blc')
         
     var R=(newWidth+newHeight)/40;
     var btn_clear = document.getElementById("btn_clear");
@@ -52,10 +52,9 @@ class Vertex
   
        
     clear=function()
-    {
-        context.fillStyle = "#ffffff";
-        context.fillRect(0, 0, canvas.width, canvas.height);
-    
+    {   context.clearRect(0, 0, canvas.width, canvas.height);
+        
+         
     } 
     render = function()
     {
@@ -116,7 +115,7 @@ class Vertex
                                     }
                                     
                                             
-    
+                                   
                         }
     canvas.addEventListener("mousedown", function(e)
     {
