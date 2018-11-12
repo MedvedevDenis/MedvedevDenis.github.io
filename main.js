@@ -23,17 +23,16 @@ class Vertex {
 var newWidth = 2 *window.innerWidth;
 var newHeight =2 * (window.innerHeight - 100) ;
 
-
-
+ 
 var canvas = document.getElementById('canvas'),
     context = canvas.getContext('2d');
 
 canvas.width =  newWidth;
 canvas.height = newHeight;
-
+var fs=(window.innerWidth+window.innerHeight)/(68);
 var vertices = []
 var blc = document.getElementById('blc')
-
+blc.style.fontSize=fs.toString()+'px';
 var R = (newWidth + newHeight) / 40;
 var btn_clear = document.getElementById("btn_clear");
 var btn_dv = document.getElementById("btn_dv");
