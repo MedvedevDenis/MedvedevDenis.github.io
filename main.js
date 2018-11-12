@@ -141,20 +141,18 @@ f1=function()
 
     context.moveTo(mouse.x, mouse.y);
     if (V == 1) draw = true;
-    
+   
 }
-canvas.addEventListener('touchstart', function(e){
-   mouse.x=e.changedTouches[0].pageX;
-   mouse.y=e.changedTouches[0].pageY;
-   f1();
-}, false)
+ 
 canvas.addEventListener("mousedown", function(e) {
     mouse.x = 2 * (e.pageX - this.offsetLeft);
     mouse.y = 2 * (e.pageY - this.offsetTop);
-   f1();
+    f1();
+    
 });
 canvas.addEventListener("mousemove", function(e) {
-
+    mouse.x = 2 * (e.pageX - this.offsetLeft);
+    mouse.y = 2 * (e.pageY - this.offsetTop);
     if (draw == true && V == 1) {
 
         mouse.x = 2 * (e.pageX - this.offsetLeft);
@@ -165,11 +163,22 @@ canvas.addEventListener("mousemove", function(e) {
         context.stroke();
     }
 });
+canvas.addEventListener('touchmove', function(e){
+    
+    mouse.x = 2 * (e.changedTouches[0].pageX - this.offsetLeft);
+    mouse.y = 2 * (e.changedTouches[0].pageY- this.offsetTop);
+    if (draw == true && V == 1) {
 
-canvas.addEventListener("mouseup", function(e) {
+        mouse.x = 2 * (e.pageX - this.offsetLeft);
+        mouse.y = 2 * (e.pageY - this.offsetTop);
 
-    mouse.x = 2 * (e.pageX - this.offsetLeft);
-    mouse.y = 2 * (e.pageY - this.offsetTop);
+        context.lineTo(mouse.x, mouse.y);
+        context.strokeStyle = '#2c3e50';
+        context.stroke();
+    }
+}, false)
+f2=function()
+{
     context.closePath();
 
 
@@ -208,11 +217,23 @@ canvas.addEventListener("mouseup", function(e) {
         vertices[J].edges.push(vertices[I].id);
     }
     V = 0;
+}
+canvas.addEventListener("mouseup", function(e) {
+
+    mouse.x = 2 * (e.pageX - this.offsetLeft);
+    mouse.y = 2 * (e.pageY - this.offsetTop);
+    f2();
 
     render();
 
 });
+canvas.addEventListener('touchend', function(e){
+    mouse.x = 2 * (e.changedTouches[0].pageX - this.offsetLeft);
+    mouse.y = 2 * (e.changedTouches[0].pageY- this.offsetTop);
+    f2();
 
+    render();
+}, false)
 btn_clear.addEventListener("click", function(e) {
     vertices = [];
     clear();
