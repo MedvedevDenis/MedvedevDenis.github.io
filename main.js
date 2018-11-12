@@ -49,9 +49,7 @@ var V = 0;
 
 
 
-canvas.addEventListener('touchstart', function(e){
-    alert(e.changedTouches[0].pageX)  
-}, false)
+
 clear = function() {
     context.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -116,8 +114,8 @@ render = function() {
 
 
 }
-canvas.addEventListener("mousedown", function(e) {
-    V = 0;
+f1=function()
+{   V = 0;
     mouse.x = 2 * (e.pageX - this.offsetLeft);
     mouse.y = 2 * (e.pageY - this.offsetTop);
     var A = 0;
@@ -145,6 +143,13 @@ canvas.addEventListener("mousedown", function(e) {
 
     context.moveTo(mouse.x, mouse.y);
     if (V == 1) draw = true;
+    
+}
+canvas.addEventListener('touchstart', function(e){
+   f1();
+}, false)
+canvas.addEventListener("mousedown", function(e) {
+   f1();
 });
 canvas.addEventListener("mousemove", function(e) {
 
