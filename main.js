@@ -17,11 +17,8 @@ class Vertex {
 }
 
 
-window.addEventListener('load', function(){ // после загрузки страницы
-    document.body.addEventListener('touchstart', function(e){
-        alert(e.changedTouches[0].pageX) // показ коррдинат места прикосновения по X-у.
-    }, false)
-}, false)
+
+
 
 var newWidth = window.innerWidth;
 var newHeight = window.innerHeight;
@@ -52,6 +49,9 @@ var V = 0;
 
 
 
+canvas.addEventListener('touchstart', function(e){
+    alert(e.changedTouches[0].pageX)  
+}, false)
 clear = function() {
     context.clearRect(0, 0, canvas.width, canvas.height);
 
