@@ -116,8 +116,6 @@ render = function() {
 }
 f1=function()
 {   V = 0;
-    mouse.x = 2 * (e.pageX - this.offsetLeft);
-    mouse.y = 2 * (e.pageY - this.offsetTop);
     var A = 0;
     for (var i = 0; i < vertices.length; i++) {
         if (Math.sqrt((vertices[i].x - mouse.x) * (vertices[i].x - mouse.x) + (vertices[i].y - mouse.y) * (vertices[i].y - mouse.y)) <= vertices[i].r) {
@@ -146,9 +144,13 @@ f1=function()
     
 }
 canvas.addEventListener('touchstart', function(e){
+   mouse.x=e.changedTouches[0].pageX;
+   mouse.y=e.changedTouches[0].pageY;
    f1();
 }, false)
 canvas.addEventListener("mousedown", function(e) {
+    mouse.x = 2 * (e.pageX - this.offsetLeft);
+    mouse.y = 2 * (e.pageY - this.offsetTop);
    f1();
 });
 canvas.addEventListener("mousemove", function(e) {
