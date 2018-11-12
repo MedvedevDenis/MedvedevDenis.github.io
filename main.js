@@ -20,16 +20,16 @@ class Vertex {
 
 
 
-var newWidth = window.innerWidth;
-var newHeight = window.innerHeight;
+var newWidth = 2 *window.innerWidth;
+var newHeight =2 * (window.innerHeight - 100) ;
 
 
 
 var canvas = document.getElementById('canvas'),
     context = canvas.getContext('2d');
 
-canvas.width = 2 * newWidth;
-canvas.height = 2 * (newHeight - 100);
+canvas.width =  newWidth;
+canvas.height = newHeight;
 
 var vertices = []
 var blc = document.getElementById('blc')
@@ -114,8 +114,12 @@ render = function() {
 
 
 }
-f1=function()
-{   V = 0;
+ 
+
+canvas.addEventListener("mousedown", function(e) {
+    mouse.x = 2 * (e.pageX - this.offsetLeft);
+    mouse.y = 2 * (e.pageY - this.offsetTop);
+    V = 0;
     var A = 0;
     for (var i = 0; i < vertices.length; i++) {
         if (Math.sqrt((vertices[i].x - mouse.x) * (vertices[i].x - mouse.x) + (vertices[i].y - mouse.y) * (vertices[i].y - mouse.y)) <= vertices[i].r) {
@@ -141,18 +145,10 @@ f1=function()
 
     context.moveTo(mouse.x, mouse.y);
     if (V == 1) draw = true;
-   
-}
- 
-canvas.addEventListener("mousedown", function(e) {
-    mouse.x = 2 * (e.pageX - this.offsetLeft);
-    mouse.y = 2 * (e.pageY - this.offsetTop);
-    f1();
     
 });
 canvas.addEventListener("mousemove", function(e) {
-    mouse.x = 2 * (e.pageX - this.offsetLeft);
-    mouse.y = 2 * (e.pageY - this.offsetTop);
+
     if (draw == true && V == 1) {
 
         mouse.x = 2 * (e.pageX - this.offsetLeft);
@@ -163,22 +159,11 @@ canvas.addEventListener("mousemove", function(e) {
         context.stroke();
     }
 });
-canvas.addEventListener('touchmove', function(e){
-    
-    mouse.x = 2 * (e.changedTouches[0].pageX - this.offsetLeft);
-    mouse.y = 2 * (e.changedTouches[0].pageY- this.offsetTop);
-    if (draw == true && V == 1) {
 
-        mouse.x = 2 * (e.pageX - this.offsetLeft);
-        mouse.y = 2 * (e.pageY - this.offsetTop);
+canvas.addEventListener("mouseup", function(e) {
 
-        context.lineTo(mouse.x, mouse.y);
-        context.strokeStyle = '#2c3e50';
-        context.stroke();
-    }
-}, false)
-f2=function()
-{
+    mouse.x = 2 * (e.pageX - this.offsetLeft);
+    mouse.y = 2 * (e.pageY - this.offsetTop);
     context.closePath();
 
 
@@ -217,23 +202,11 @@ f2=function()
         vertices[J].edges.push(vertices[I].id);
     }
     V = 0;
-}
-canvas.addEventListener("mouseup", function(e) {
-
-    mouse.x = 2 * (e.pageX - this.offsetLeft);
-    mouse.y = 2 * (e.pageY - this.offsetTop);
-    f2();
 
     render();
 
 });
-canvas.addEventListener('touchend', function(e){
-    mouse.x = 2 * (e.changedTouches[0].pageX - this.offsetLeft);
-    mouse.y = 2 * (e.changedTouches[0].pageY- this.offsetTop);
-    f2();
 
-    render();
-}, false)
 btn_clear.addEventListener("click", function(e) {
     vertices = [];
     clear();
