@@ -26,7 +26,8 @@ var newHeight =2 * (window.innerHeight - 100) ;
  
 var canvas = document.getElementById('canvas'),
     context = canvas.getContext('2d');
-
+alert(window.innerWidth)
+alert(window.innerHeight)
 canvas.width =  newWidth;
 canvas.height = newHeight;
 var fs=(window.innerWidth+window.innerHeight)/(68);
