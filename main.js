@@ -1,42 +1,39 @@
-class Vertex {
+class Vertex 
+{
 
     constructor(id, x, y, r) {
         this.id = id;
         this.edges = [];
         this.active = 0
         this.dfsi = -1
-        this.return_index = -1;
+        this.return_index = 10000;
         this.IsCutVertex = false;
         this.x = x;
         this.y = y;
         this.r = r;
+        this.DL=false;
     }
-
-
 
 }
 
 
-
-
-
 var newWidth = 2 *window.innerWidth;
 var newHeight =2 * (window.innerHeight - 100) ;
-
  
 var canvas = document.getElementById('canvas'),
     context = canvas.getContext('2d');
-alert(window.innerWidth)
-alert(window.innerHeight)
+
 canvas.width =  newWidth;
 canvas.height = newHeight;
 var fs=(window.innerWidth+window.innerHeight)/(68);
 var vertices = []
 var blc = document.getElementById('blc')
 blc.style.fontSize=fs.toString()+'px';
-var R = (newWidth + newHeight) / 40;
+var R = (newWidth + newHeight) / 60;
 var btn_clear = document.getElementById("btn_clear");
 var btn_dv = document.getElementById("btn_dv");
+var btn_rs = document.getElementById("btn_rs");
+var btn_rt = document.getElementById("btn_rt");
 var btn_dfs = document.getElementById("btn_dfs");
 var I = 0;
 var J = 0;
@@ -63,7 +60,7 @@ render = function() {
     for (i = 0; i < vertices.length; i++) {
         for (j = 0; j < vertices[i].edges.length; j++) {
             for (k = 0; k < vertices.length; k++) {
-                if (vertices[i].edges[j] == vertices[k].id) {
+                if (vertices[i].edges[j] == vertices[k].id && vertices[k].DL==false && vertices[i].DL==false  ) {
 
 
                     context.beginPath();
@@ -83,7 +80,7 @@ render = function() {
         context.beginPath();
         context.arc(vertices[i].x, vertices[i].y, vertices[i].r, 0, 2 * Math.PI, false);
         if (vertices[i].active == 0)
-            context.fillStyle = '#f1f2f6';
+            context.fillStyle ='#f1f2f6';
         if (vertices[i].active == 1)
             context.fillStyle = '#2ed573';
         if (vertices[i].IsCutVertex == true)
@@ -99,7 +96,7 @@ render = function() {
         context.fillText((vertices[i].id+1).toString(), vertices[i].x, vertices[i].y);
         if (vertices[i].dfsi >= 0)
             context.fillText((vertices[i].dfsi+1).toString(), vertices[i].x - vertices[i].r, vertices[i].y - vertices[i].r * 1.5);
-        if (vertices[i].return_index >= 0) {
+        if (vertices[i].return_index < 10000) {
             context.beginPath();
             context.arc(vertices[i].x - vertices[i].r * 1.9, vertices[i].y - vertices[i].r * 1.6, 20, 0, 2 * Math.PI, false);
             context.lineWidth = 3;
@@ -111,11 +108,19 @@ render = function() {
 
     }
 
-
-
 }
  
-
+btn_rs.addEventListener("click", function(e) {
+    for (i = 0; i < vertices.length; i++) 
+        vertices[i].DL=false;
+    render();
+}  );
+btn_rt.addEventListener("click", function(e) {
+    for (i = 0; i < vertices.length; i++) 
+        if(vertices[i].IsCutVertex==true)
+            vertices[i].DL=true;
+    render();
+}  );
 canvas.addEventListener("mousedown", function(e) {
     mouse.x = 2 * (e.pageX - this.offsetLeft);
     mouse.y = 2 * (e.pageY - this.offsetTop);
@@ -189,6 +194,7 @@ canvas.addEventListener("mouseup", function(e) {
                 vertices[k].active = 0;
 
             vertices[i].active = 1;
+            flag=2;
         }
 
 
@@ -200,6 +206,8 @@ canvas.addEventListener("mouseup", function(e) {
     if (flag == 1 && V == 1) {
         vertices[I].edges.push(vertices[J].id);
         vertices[J].edges.push(vertices[I].id);
+        vertices[I].edges.sort();
+        vertices[J].edges.sort();
     }
     V = 0;
 
@@ -214,7 +222,6 @@ btn_clear.addEventListener("click", function(e) {
 });
 btn_dv.addEventListener("click", function(e) {
     var Active = 0;
-    var flag = 0;
     var JJ;
     for (var i = 0; i < vertices.length; i++) {
         if (vertices[i].active == 1) {
@@ -246,86 +253,85 @@ btn_dv.addEventListener("click", function(e) {
     render();
 });
 
-function GetMatrix(rows, columns) {
-    var arr = new Array();
-    for (var i = 0; i < rows; i++) {
-        arr[i] = new Array();
-        for (var j = 0; j < columns; j++) {
-            arr[i][j] = 0;
-            for (k = 0; k < vertices[i].edges.length; k++)
-                if (vertices[i].edges[k] == j) {
-                    arr[i][j] = 1;
-
-                }
-
-        }
-    }
-    return arr;
-}
 var used = [];
-
+var active_call_count=0;
 var K = 0;
 var prev = 0;
-var MD = 1000;
+var RI = 1000;
 var Active = 0;
-
-function dfs(M, v) {
-
-
+var Side;
+function dfs(v) {
+    var flag=0;
     used[v] = 1;
     vertices[v].dfsi = K;
     var pv = prev;
-
-
-    for (var i = 0; i < vertices.length; i++) {
-
-
-        if (M[v][i] == 1 && used[i] != 1) {
+    for (var i = 0; i < vertices[v].edges.length; i++) {
+        if (Side==1)
+                RI = 1000;   
+        if (used[vertices[v].edges[i]] != 1)
+        {    
+            if(v==Active)active_call_count++;
             K = K + 1;
             flag = 1;
             prev = v;
-
-            dfs(M, i);
+            Side=1;
+            dfs(vertices[v].edges[i]);
+            Side=-1;
             if (v == Active)
-                MD = 1000;
+                RI = 1000;
 
         }
-
+        if(RI <1000 && RI>=vertices[v].dfsi && flag ==1)
+        { 
+        vertices[v].IsCutVertex=true;
+        vertices[v].DL=true; 
+        }
     }
-
+     
     var min = [];
     for (var j = 0; j < vertices[v].edges.length; j++) {
         for (var k = 0; k < vertices.length; k++) {
             if (vertices[v].edges[j] == vertices[k].id && vertices[v].edges[j] != vertices[pv].id) {
-                min.push(vertices[k].dfsi)
+                min.push(vertices[k].dfsi);
+                min.push(vertices[k].return_index);
             }
         }
     }
-
     min.push(vertices[v].dfsi)
-    min.push(MD);
-
+    min.push(RI);
     vertices[v].return_index = Math.min.apply(null, min);
-
-    render();
-    MD = vertices[v].return_index;
-
+    RI = vertices[v].return_index;
 
 }
-btn_dfs.addEventListener("click", function(e) {
 
-    K = 0;
+btn_dfs.addEventListener("click", function(e) {
     used = [];
+    active_call_count=0;
+    K = 0;
+    prev = 0;
+    RI = 1000;
+    Active = 0;
+    Side=1;
     for (i = 0; i < vertices.length; i++) {
+        vertices[i].IsCutVertex=false;
+        vertices[i].DL=false;
+        vertices[i].dfsi=-1;
+        vertices[i].return_index=10000;
         if (vertices[i].active == 1)
             Active = i;
         used.push(0);
     }
 
-    var M = GetMatrix(vertices.length, vertices.length);
-
-
-    dfs(M, Active);
-
+    dfs(Active);
+    if(active_call_count==1)  
+        {vertices[Active].IsCutVertex=false;
+        vertices[Active].DL=false;
+        }
+    else 
+    {
+        vertices[Active].IsCutVertex=true;
+        vertices[Active].DL=true;
+    }
+        
     render();
 });
